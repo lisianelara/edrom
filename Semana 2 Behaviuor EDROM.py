@@ -1,0 +1,34 @@
+from transitions import Machine
+
+class Estudante:
+    pass
+estados = ['descansando', 'estudando', 'no_bar']
+
+#transições possíveis
+transicoes = [
+    {'trigger': 'inicio_semana', 'source': 'descansando', 'dest': 'estudando'},
+    {'trigger': 'fim_semana', 'source': 'estudando', 'dest': 'descansando'},
+    {'trigger': 'prova', 'source': 'estudando', 'dest': 'no_bar'},
+    {'trigger': 'sem_prova', 'source': 'estudando', 'dest': 'descansando'},
+    {'trigger': 'curtir', 'source': 'descansando', 'dest': 'no_bar'},
+    {'trigger': 'voltar_casa', 'source': 'no_bar', 'dest': 'descansando'}
+]
+
+maquina_estados = Machine(model=Estudante(), states=estados, transitions=transicoes, initial='descansando')
+
+# Exemplo de uso da máquina de estados
+estudante = Estudante()
+
+print("Estado inicial:", estudante.state)
+
+estudante.inicio_semana()
+print("Depois de começar a semana:", estudante.state)
+
+estudante.prova()
+print("Depois de ter uma prova:", estudante.state)
+
+estudante.voltar_casa()
+print("Depois de voltar para casa:", estudante.state)
+
+estudante.fim_semana()
+print("Depois de terminar a semana:", estudante.state)
