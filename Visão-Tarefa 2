@@ -1,0 +1,41 @@
+import cv2
+import numpy as np
+
+# Função para realizar a mudança de cor
+def change_color(frame):
+    # Define a faixa de cor azul na escala HSV
+    lower_blue = np.array([100, 50, 50])
+    upper_blue = np.array([130, 255, 255])
+
+    # Converte a imagem para o espaço de cor HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # Cria uma máscara para a cor azul
+    mask = cv2.inRange(hsv, lower_blue, upper_blue)
+
+    # Substitui a cor azul pela cor vermelha na imagem original
+    frame[mask > 0] = [0, 0, 255]
+
+    return frame
+
+# Inicializa a câmera
+cap = cv2.VideoCapture(0)
+
+while True:
+    # Captura o frame da câmera
+    ret, frame = cap.read()
+
+    # Realiza a mudança de cor
+    frame = change_color(frame)
+
+    # Exibe a imagem original e a imagem com a mudança de cor
+    cv2.imshow('Original', frame)
+    cv2.imshow('Color Change', change_color(frame))
+
+    # Verifica se o usuário pressionou a tecla 'ESC' para sair do loop
+    if cv2.waitKey(1) == 27:
+        break
+
+# Libera os recursos da câmera e fecha as janelas
+cap.release()
+cv2.destroyAllWindows()
